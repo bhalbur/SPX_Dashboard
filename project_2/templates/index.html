@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-2">
+      <div class="col-md-3">
         <div class="well">
           <h5>Select by Ticker:</h5>
           <select id="tickerSelector" onchange="optionChanged(this.value)">
@@ -27,24 +27,32 @@
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title">Sample MetaData</h3>
+            <h3 class="panel-title">Ticker Details</h3>
           </div>
-          <div id="metadata" class="panel-body"></div>
+          <div id="ticker-details" class="panel-body"></div>
         </div>
       </div>
-      <div class="col-md-5">
-        <div id="pieplot"></div>
+      <div class="col-md-9">
+        <div class="panel panel-primary" id="map">
+        <h1> This is where the map will go. ID = 'map-div' </h1>
+        </div>
       </div>
-      <div class="col-md-5">
-        <div id="gauge"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-primary" id="api-div">
+          <h3> Div for API. ID = 'api-div' </h3>
+        </div>        
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-primary" id="chart-div">
+          <h3> Maybe a plotly chart?. ID = 'chart-div' </h3>
+        </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div id="bubbleplot"></div>
-    </div>
-  </div>
+
 
   <!-- <script src="https://cdn.plot.ly/plotly-1.31.2.min.js"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
