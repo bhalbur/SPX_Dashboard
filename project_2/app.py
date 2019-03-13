@@ -46,11 +46,14 @@ def scrape():
 
 
 
-@app.route("/metadata/<sample>")
-def sample_metadata(sample):
+@app.route("/currentprice/<ticker>")
+def currentprice(ticker):
    ### LEFTOVERS FROM PREVIOUS HOMEWORK
    ### LEFTOVERS FROM PREVIOUS HOMEWORK
    ### LEFTOVERS FROM PREVIOUS HOMEWORK
+
+##API CALL URL + ticker
+
 
     """Return the MetaData for a given sample."""
     sel = [
