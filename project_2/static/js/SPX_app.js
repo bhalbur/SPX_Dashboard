@@ -1,8 +1,8 @@
 function historicAPI(){
 }
 
-function currentAPI(){
-
+function currentAPI(apiOutput){
+  d3.select('#pxHtml').html(`Last Price: $${apiOutput}`)
 }
 
 function basicInfo(currpx){
@@ -24,6 +24,8 @@ var baseMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?
   id: "mapbox.streets",
   accessToken: 'pk.eyJ1IjoiYmhhbGJ1ciIsImEiOiJjanN3bG45aHMwNjdrNDNwZmltcmhyMTU5In0.4fWTF1uFox70N-HNCUejHQ'
 }).addTo(myMap);
+
+
 
 }
 
