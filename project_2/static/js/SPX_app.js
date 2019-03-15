@@ -29,19 +29,26 @@ var baseMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?
 
 }
 
+function refreshData(){
+  d3.select()
+
+
+
+}
+
+
 
 function init() {
   // Grab a reference to the dropdown select element
   var selector = d3.select("#tickerSelector");
 
   // Use the list of sample names to populate the select options
-  d3.json("/scrape").then((tickerList) => {
+  d3.json("/names").then((tickerList) => {
     
     tickerList.forEach((ticker) => {
       selector
         .append("option")
         .text(ticker)
-
         .property("value", ticker);
     });
 

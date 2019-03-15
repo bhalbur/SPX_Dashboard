@@ -3,6 +3,11 @@ import os
 import pandas as pd
 import numpy as np
 import pprint
+import requests
+import json
+from config import API_KEY
+
+
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -43,22 +48,24 @@ def scrape():
     return jsonify(tickerList)
     #This list should populate our dropdown of tickers
 
-
-
+@app.route("/names")
+def names():
+    query_text = 'Select Symbol from constituents'
+    tick = pd.read_sql_query(query_text, engine)
+    tickerList = list(tick['Symbol'])
+    return jsonify(tickerList)
 
 
 
 @app.route("/currentprice/<ticker>")
 def currentprice(ticker):
-  symbol = ticker
-  response = requests.get(f'https://cloud.iexapis.com/beta/stock/{symbol1}/price/quote?token={API_KEY}')
-  response_json = response.json()
-  return(json.dumps(response_json, indent=4, sort_keys=True))
+    response = requests.get(f'https://cloud.iexapis.com/beta/stock/{ticker}/price/quote?token={API_KEY}')
+    return response.json()
 
 
-
-
-
+@app.route("/test")
+def test():
+    return API_KEY + 'sk_b2ea88ddb1294f5d8115e36ee3873a05'
 
 @app.route("/samples/<sample>")
 def samples(sample):
