@@ -37,6 +37,8 @@ if (row.lat && row.lng){
   var marker = L.marker([parseFloat(row.lat), parseFloat(row.lng)], {
     title: row.Security,
     icon: L.ExtraMarkers.icon({
+        icon: 'fa-bicycle',
+        prefix: 'fa',
         color: 'black',
         shape: 'square',
       })
@@ -45,6 +47,7 @@ if (row.lat && row.lng){
   marker_group.addLayer(marker)
   }
 });
+
 
 myMap.addLayer(marker_group);
 }
@@ -111,10 +114,16 @@ function init() {
 }
 
 
+
+
 function optionChanged(dropdown_value) {
-  d3.json(`/basicinfo/${dropdown_value}`).then(basicInfo);  
-  d3.json(`/currentprice/${dropdown_value}`).then(currentAPI);  
-  d3.json(`/historicprice/${dropdown_value}`).then(historicAPI);  
-}
+  d3.json(`/ticker_info/${dropdown_value}`).then(function (data) {
+
+    console.log(data)
+    d3.select('#pxHtml').html(`Last Price: $${data[0]['current_price']}`)
+  }
+
+)};  
+
 
 init()

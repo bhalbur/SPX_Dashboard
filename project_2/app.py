@@ -8,7 +8,6 @@ import json
 from googlekey import API_KEY
 
 
-
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -62,34 +61,16 @@ def allData():
     constituents = allData.to_json(orient='records')
     return constituents
 
-@app.route("/currentprice/<ticker>")
-def currentprice(ticker):
-    response = requests.get(f'https://cloud.iexapis.com/beta/stock/{ticker}/price/quote?token={API_KEY}')
-    return response.json()
+@app.route('/ticker_info/<ticker>')
+def ticker_info(ticker):
+    current_price_response = requests.get(f'https://cloud.iexapis.com/beta/stock/{ticker}/price/quote?token={API_KEY}')
+    current_price = current_price_response.json()
+    data = [{'current_price': str(current_price)}]
 
+    historical_data_response = requests.get(f'https://cloud.iexapis.com/beta/stock/{ticker}/chart/1y/quote?token={API_KEY}' )
+    historical_data = historical_data_response.json()
+    data = data + historical_data
 
-@app.route("/samples/<sample>")
-def samples(sample):
-    ### LEFTOVERS FROM PREVIOUS HOMEWORK
-    ### LEFTOVERS FROM PREVIOUS HOMEWORK
-    ### LEFTOVERS FROM PREVIOUS HOMEWORK
-    """Return `otu_ids`, `otu_labels`,and `sample_values`."""
-    stmt = db.session.query(Samples).statement
-    df = pd.read_sql_query(stmt, db.session.bind)
-
-    # Filter the data based on the sample number and
-    # only keep rows with values above 1
-
-    sample_data1 = df.loc[df[sample] > 1, ["otu_id", "otu_label", sample]]
-    sample_data = sample_data1.sort_values(by=[sample])
-
-
-    # Format the data to send as json
-    data = {
-        "otu_ids": sample_data.otu_id.values.tolist(),
-        "sample_values": sample_data[sample].values.tolist(),
-        "otu_labels": sample_data.otu_label.tolist(),
-    }
     return jsonify(data)
 
 
