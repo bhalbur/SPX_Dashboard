@@ -5,7 +5,7 @@ import numpy as np
 import pprint
 import requests
 import json
-from config import API_KEY
+from googlekey import API_KEY
 
 
 
@@ -67,10 +67,6 @@ def currentprice(ticker):
     response = requests.get(f'https://cloud.iexapis.com/beta/stock/{ticker}/price/quote?token={API_KEY}')
     return response.json()
 
-
-@app.route("/test")
-def test():
-    return API_KEY + 'sk_b2ea88ddb1294f5d8115e36ee3873a05'
 
 @app.route("/samples/<sample>")
 def samples(sample):
