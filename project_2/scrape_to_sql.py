@@ -45,5 +45,3 @@ def scrape_to_sql():
 	### to read back the sql, verify it is working
 	df = pd.read_sql('select * from constituents', con=engine)
 	print(df.head(5))
-
-scrape_to_sql()
