@@ -5,3 +5,4 @@ pprint
 requests
 sqlalchemy
 gunicorn
+flask_sqlalchemy
