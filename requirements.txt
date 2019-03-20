@@ -1,0 +1,8 @@
+flask
+pandas
+numpy
+pprint
+requests
+sqlalchemy
+gunicorn
+flask_sqlalchemy
