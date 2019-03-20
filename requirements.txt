@@ -4,3 +4,4 @@ numpy
 pprint
 requests
 sqlalchemy
+gunicorn
