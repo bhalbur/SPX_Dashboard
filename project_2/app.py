@@ -29,14 +29,6 @@ def index():
     """Return the homepage."""
     return render_template("index.html")
 
-
-@app.route("/json")
-def json():
-    query_text = 'Select * from constituents'
-    json_resp = pd.read_sql_query(query_text, engine).to_json(orient='records')
-    return jsonify(json_resp)
-
-
 @app.route("/scrape")
 def scrape():
     #refresh the sql data
@@ -60,6 +52,15 @@ def allData():
     allData = pd.read_sql_query(query_text, engine)
     constituents = allData.to_json(orient='records')
     return constituents
+
+@app.route('/basic/<ticker>')
+def basic(ticker):
+    query_text = f"Select Security, Symbol, [GICS Sector], [Headquarters Location], Founded from constituents where Symbol = '{ticker}'"
+    basics = pd.read_sql_query(query_text, engine)
+    info = basics.to_json(orient='records')
+    return info
+
+
 
 @app.route('/ticker_info/<ticker>')
 def ticker_info(ticker):

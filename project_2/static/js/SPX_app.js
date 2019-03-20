@@ -1,13 +1,13 @@
-function historicAPI(){
-}
 
-function currentAPI(apiOutput){
-  d3.select('#pxHtml').html(`Last Price: $${apiOutput}`)
-}
+function basicInfo(info){
 
-function basicInfo(currpx){
-  d3.select('api-div')
-  d3.html(currpx)
+  output = ''
+
+  Object.entries(info[0]).forEach(([x,y]) => {
+    output += `<b>${x}</b>: ${y}<br>`
+  })
+
+  d3.select("#ticker-details").html(output)
 }
 
 
@@ -18,7 +18,7 @@ function fetchMap(){
 function buildMap(mapData){
 
 var myMap = L.map("map-div", {
-  center: [37.0902, -95.7129],
+  center: [38.0902, -97.7129],
   zoom: 4,
 });
 
@@ -32,14 +32,26 @@ var baseMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?
 
 var marker_group = L.markerClusterGroup()
 
+var Industrials;
+var HealthCare;
+var InformationTechnology;
+var CommunicationServices;
+var ConsumerDiscretionary;
+var Utilities;
+var Financials;
+var Materials;
+var RealEstate;
+var ConsumerStaples;
+var Energy;
+
 var markers = mapData.forEach(row => {
 if (row.lat && row.lng){
   var marker = L.marker([parseFloat(row.lat), parseFloat(row.lng)], {
     title: row.Security,
     icon: L.ExtraMarkers.icon({
-        icon: 'fa-bicycle',
+        icon: 'fa-building',
         prefix: 'fa',
-        color: 'black',
+        markerColor: GICScolor(row['GICS Sector'])[0],
         shape: 'square',
       })
   })
@@ -47,7 +59,6 @@ if (row.lat && row.lng){
   marker_group.addLayer(marker)
   }
 });
-
 
 myMap.addLayer(marker_group);
 }
@@ -65,7 +76,7 @@ function GICScolor(sector) {
     case 'Consumer Discretionary':
       return 'green';
     case 'Utilities':
-      return 'cyan'
+      return 'cyan';
     case 'Financials': 
       return 'blue';
     case 'Materials': 
@@ -99,6 +110,7 @@ function init() {
   // Use the list of sample names to populate the select options
   d3.json("/names").then((tickerList) => {
     
+    var defaultTicker = tickerList[Math.floor(Math.random() * tickerList.length)];
     tickerList.forEach((ticker) => {
       selector
         .append("option")
@@ -107,9 +119,10 @@ function init() {
     });
 
     // Use the first sample from the list to build the initial plots
-    var defaultTicker = tickerList[Math.floor(Math.random() * tickerList.length)];
+
     console.log(defaultTicker);
     fetchMap()
+    optionChanged(defaultTicker)
   });
 }
 
@@ -121,9 +134,9 @@ function optionChanged(dropdown_value) {
 
     console.log(data)
     d3.select('#pxHtml').html(`Last Price: $${data[0]['current_price']}`)
-  }
-
-)};  
+  })
+  d3.json(`/basic/${dropdown_value}`).then(basicInfo)
+};  
 
 
 init()
