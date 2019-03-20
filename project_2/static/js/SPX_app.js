@@ -1,4 +1,5 @@
 
+
 function basicInfo(info){
 
   output = ''
@@ -131,7 +132,6 @@ function init() {
 
 function optionChanged(dropdown_value) {
   d3.json(`/ticker_info/${dropdown_value}`).then(function (data) {
-
     console.log(data)
     d3.select('#pxHtml').html(`Last Price: $${data[0]['current_price']}`)
   })
