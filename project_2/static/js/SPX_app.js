@@ -33,17 +33,19 @@ var baseMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?
 
 var marker_group = L.markerClusterGroup()
 
-var Industrials;
-var HealthCare;
-var InformationTechnology;
-var CommunicationServices;
-var ConsumerDiscretionary;
-var Utilities;
-var Financials;
-var Materials;
-var RealEstate;
-var ConsumerStaples;
-var Energy;
+var sectorNames = {
+  'Industrials':[],
+  'HealthCare': [],
+  'InformationTechnology': [],
+  'CommunicationServices': [],
+  'ConsumerDiscretionary': [],
+  'Utilities': [],
+  'Financials': [],
+  'Materials': [],
+  'RealEstate': [],
+  'ConsumerStaples': [],
+  'Energy': []
+}
 
 var markers = mapData.forEach(row => {
 if (row.lat && row.lng){
@@ -56,38 +58,79 @@ if (row.lat && row.lng){
         shape: 'square',
       })
   })
+  sectorNames[GICScolor(row['GICS Sector'])[1]].push(marker)
   marker.bindPopup(`${row['Security']} (${row['Symbol']}) <hr> ${row['GICS Sector']}`)
-  marker_group.addLayer(marker)
+  
   }
 });
 
-myMap.addLayer(marker_group);
-}
+console.log(defaultTicker)
 
+
+IndusLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.Industrials));
+HCLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.HealthCare));
+ITLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.InformationTechnology));
+ComLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.CommunicationServices));
+DiscretLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.ConsumerDiscretionary));
+UtilLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.Utilities));
+FinLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.Financials));
+MatLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.Materials));
+RealLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.RealEstate));
+StapleLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.ConsumerStaples));
+EnergLayer = L.markerClusterGroup().addLayer(L.layerGroup(sectorNames.Energy));
+
+
+var baseLayers = {
+  'Base Map': baseMap
+};
+
+var overlays = {
+  'Industrials': IndusLayer,
+  'HealthCare': HCLayer,
+  'InformationTechnology': ITLayer,
+  'CommunicationServices': ComLayer,
+  'ConsumerDiscretionary': DiscretLayer,
+  'Utilities': UtilLayer,
+  'Financials': FinLayer,
+  'Materials': MatLayer,
+  'RealEstate': RealLayer,
+  'ConsumerStaples': StapleLayer,
+  'Energy': EnergLayer
+  };
+
+myMap.addLayer(IndusLayer)
+
+L.control.layers(baseLayers,overlays).addTo(myMap);
+
+}
+//END OF MAP FUNCTION
+
+
+//This funciton used to allocate each company to an industry and color based on GICS industry code
 function GICScolor(sector) {
   switch (sector) {
     case 'Industrials':
-      return 'red';
+      return ['red', 'Industrials'];
     case 'Health Care': 
-      return 'orange-dark';
+      return ['orange-dark', 'HealthCare'];
     case 'Information Technology':
-      return 'orange';
+      return ['orange', 'InformationTechnology'];
     case 'Communication Services':
-      return 'yellow';
+      return ['yellow', 'CommunicationServices'];
     case 'Consumer Discretionary':
-      return 'green';
+      return ['green', 'ConsumerDiscretionary'];
     case 'Utilities':
-      return 'cyan';
+      return ['cyan', 'Utilities'];
     case 'Financials': 
-      return 'blue';
+      return ['blue', 'Financials'];
     case 'Materials': 
-      return 'blue-dark';
+      return ['blue-dark', 'Materials'];
     case 'Real Estate': 
-      return 'purple';
+      return ['purple', 'RealEstate'];
     case 'Consumer Staples': 
-      return 'violet';
+      return ['violet', 'ConsumerStaples'];
     case 'Energy':
-      return 'pink';
+      return ['pink','Energy'];
   }
 }
 
@@ -96,13 +139,12 @@ function GICScolor(sector) {
 function refreshData(){
   // build in a button to the page to call the refresh route
   d3.select()
-
-
-
+  
   d3.json('/scrape')
 }
 
 
+var defaultTicker;
 
 function init() {
   // Grab a reference to the dropdown select element
@@ -113,16 +155,25 @@ function init() {
     
     var defaultTicker = tickerList[Math.floor(Math.random() * tickerList.length)];
     tickerList.forEach((ticker) => {
+      if (ticker == defaultTicker) {
+        selector
+        .append("option")
+        .text(ticker)
+        .property("value", ticker)
+        .property("selected", "selected");
+      }
+      else {
       selector
         .append("option")
         .text(ticker)
         .property("value", ticker);
+      }
     });
 
     // Use the first sample from the list to build the initial plots
 
+    fetchMap(defaultTicker)
     console.log(defaultTicker);
-    fetchMap()
     optionChanged(defaultTicker)
   });
 }

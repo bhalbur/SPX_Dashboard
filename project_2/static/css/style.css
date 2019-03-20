@@ -1,6 +1,6 @@
 #map-div {
   height: 400px;
-  padding: 0;
+  padding: 10px;
   margin: 0;
 }
 
@@ -8,4 +8,9 @@
   height: 300px;
   padding: 0;
   margin: 0;
+}
+
+#headbox {
+  padding: 0;
+  margin-top: 1%;
 }

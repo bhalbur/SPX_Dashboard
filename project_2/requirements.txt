@@ -1,0 +1,10 @@
+flask
+os
+pandas
+numpy
+pprint
+requests
+json
+sqlalchemy
+sqlalchemy.ext.automap
+sqlalchemy.orm
