@@ -4,5 +4,3 @@ numpy
 pprint
 requests
 sqlalchemy
-sqlalchemy.ext.automap
-sqlalchemy.orm
