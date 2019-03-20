@@ -52,6 +52,6 @@ var layout = {
   }
 };
 
-Plotly.plot('chart-div', data1, layout);
+Plotly.newPlot('chart-div', data1, layout);
 
 };
