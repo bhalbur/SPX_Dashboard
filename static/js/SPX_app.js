@@ -60,7 +60,7 @@ if (row.lat && row.lng){
   })
   sectorNames[GICScolor(row['GICS Sector'])[1]].push(marker)
   marker.bindPopup(`${row['Security']} (${row['Symbol']}) <hr> ${row['GICS Sector']}`)
-  
+
   }
 });
 
@@ -111,7 +111,7 @@ function GICScolor(sector) {
   switch (sector) {
     case 'Industrials':
       return ['red', 'Industrials'];
-    case 'Health Care': 
+    case 'Health Care':
       return ['orange-dark', 'HealthCare'];
     case 'Information Technology':
       return ['orange', 'InformationTechnology'];
@@ -121,13 +121,13 @@ function GICScolor(sector) {
       return ['green', 'ConsumerDiscretionary'];
     case 'Utilities':
       return ['cyan', 'Utilities'];
-    case 'Financials': 
+    case 'Financials':
       return ['blue', 'Financials'];
-    case 'Materials': 
+    case 'Materials':
       return ['blue-dark', 'Materials'];
-    case 'Real Estate': 
+    case 'Real Estate':
       return ['purple', 'RealEstate'];
-    case 'Consumer Staples': 
+    case 'Consumer Staples':
       return ['violet', 'ConsumerStaples'];
     case 'Energy':
       return ['pink','Energy'];
@@ -139,7 +139,7 @@ function GICScolor(sector) {
 function refreshData(){
   // build in a button to the page to call the refresh route
   d3.select()
-  
+
   d3.json('/scrape')
 }
 
@@ -152,7 +152,7 @@ function init() {
 
   // Use the list of sample names to populate the select options
   d3.json("/names").then((tickerList) => {
-    
+
     var defaultTicker = tickerList[Math.floor(Math.random() * tickerList.length)];
     tickerList.forEach((ticker) => {
       if (ticker == defaultTicker) {
@@ -181,13 +181,17 @@ function init() {
 
 
 
-function optionChanged(dropdown_value) {
+
+
+function optionChanged(dropdown_value, data) {
   d3.json(`/ticker_info/${dropdown_value}`).then(function (data) {
     console.log(data)
+    buildCandleStick(data)
     d3.select('#pxHtml').html(`Last Price: $${data[0]['current_price']}`)
   })
   d3.json(`/basic/${dropdown_value}`).then(basicInfo)
-};  
+};
+d3.select('chart-div')
 
 
 init()
