@@ -68,7 +68,7 @@ function GICScolor(sector) {
   switch (sector) {
     case 'Industrials':
       return 'red';
-    case 'Health Care': 
+    case 'Health Care':
       return 'orange-dark';
     case 'Information Technology':
       return 'orange';
@@ -78,13 +78,13 @@ function GICScolor(sector) {
       return 'green';
     case 'Utilities':
       return 'cyan';
-    case 'Financials': 
+    case 'Financials':
       return 'blue';
-    case 'Materials': 
+    case 'Materials':
       return 'blue-dark';
-    case 'Real Estate': 
+    case 'Real Estate':
       return 'purple';
-    case 'Consumer Staples': 
+    case 'Consumer Staples':
       return 'violet';
     case 'Energy':
       return 'pink';
@@ -110,7 +110,7 @@ function init() {
 
   // Use the list of sample names to populate the select options
   d3.json("/names").then((tickerList) => {
-    
+
     var defaultTicker = tickerList[Math.floor(Math.random() * tickerList.length)];
     tickerList.forEach((ticker) => {
       selector
@@ -130,13 +130,17 @@ function init() {
 
 
 
-function optionChanged(dropdown_value) {
+
+
+function optionChanged(dropdown_value, data) {
   d3.json(`/ticker_info/${dropdown_value}`).then(function (data) {
     console.log(data)
+    buildCandleStick(data)
     d3.select('#pxHtml').html(`Last Price: $${data[0]['current_price']}`)
   })
   d3.json(`/basic/${dropdown_value}`).then(basicInfo)
-};  
+};
+d3.select('chart-div')
 
 
 init()
