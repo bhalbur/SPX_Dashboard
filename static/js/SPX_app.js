@@ -93,8 +93,14 @@ if (row.lat && row.lng){
     shownSector = row['GICS Sector'].split(' ').join('')
     console.log(shownSector)
   }
-  sectorNames[GICScolor(row['GICS Sector'])[1]].push(marker)
   marker.bindPopup(`${row['Security']} (${row['Symbol']}) <hr> ${row['GICS Sector']}`)
+  marker.on('click', function(){
+    optionChanged(row.Symbol);
+  })
+  marker.on('mouseover', function(){
+    marker.openPopup();
+  })
+  sectorNames[GICScolor(row['GICS Sector'])[1]].push(marker)
 
   }
 });
