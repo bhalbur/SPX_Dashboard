@@ -34,9 +34,8 @@
       <div class="col-md-3">
         <div class="well">
           <h5>Select by Ticker:</h5>
-          <input list="tickerSelector">
-          <datalist id="tickerSelector" onchange="optionChanged(this.value)">
-          </datalist>
+          <input list="tickerSelector" oninput="optionChanged(this.value)">
+          <datalist id="tickerSelector"></datalist>
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">
@@ -64,7 +63,6 @@
       </div>
       <div class="col-md-6">
         <div class="panel panel-primary" id="chart-div">
-          <h3> Maybe a plotly chart?. ID = 'chart-div' </h3>
         </div>
       </div>
     </div>

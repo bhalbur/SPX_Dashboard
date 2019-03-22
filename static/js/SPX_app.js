@@ -13,16 +13,22 @@ function basicInfo(info){
 }
 
 
-function fetchMap(){
-  d3.json('/allData').then(buildMap)
+function fetchMap(defaultTicker){
+  d3.json(`/allData/${defaultTicker}`).then(buildMap)
 }
 
-function buildMap(mapData){
+function buildMap(jsonData){
+
+
+
+defaultTicker = jsonData.defaultTicker;
+mapData = jsonData['data'];
 
 var myMap = L.map("map-div", {
   center: [38.0902, -97.7129],
   zoom: 4,
 });
+
 
 var baseMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -59,6 +65,10 @@ if (row.lat && row.lng){
         shape: 'square',
       })
   })
+  if (row.Symbol == defaultTicker){
+    shownSector = row['GICS Sector'].split(' ').join('')
+    console.log(shownSector)
+  }
   sectorNames[GICScolor(row['GICS Sector'])[1]].push(marker)
   marker.bindPopup(`${row['Security']} (${row['Symbol']}) <hr> ${row['GICS Sector']}`)
 
@@ -99,7 +109,7 @@ var overlays = {
   'Energy': EnergLayer
   };
 
-myMap.addLayer(IndusLayer)
+myMap.addLayer(overlays[shownSector])
 
 L.control.layers(baseLayers,overlays).addTo(myMap);
 

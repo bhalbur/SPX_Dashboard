@@ -46,12 +46,13 @@ def names():
     tickerList = list(tick['Symbol'])
     return jsonify(tickerList)
 
-@app.route("/allData")
-def allData():
+@app.route("/allData/<defaultTicker>")
+def allData(defaultTicker):
     query_text = 'Select * from constituents'
     allData = pd.read_sql_query(query_text, engine)
-    constituents = allData.to_json(orient='records')
-    return constituents
+    constituents = allData.to_dict(orient='records')
+    return jsonify({ 'defaultTicker': defaultTicker, 'data': constituents})
+
 
 @app.route('/basic/<ticker>')
 def basic(ticker):
