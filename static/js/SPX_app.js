@@ -8,6 +8,7 @@ function basicInfo(info){
     output += `<b>${x}</b>: ${y}<br>`
   })
 
+  d3.select("#ticker-name").text(`Ticker Details: ${info[0]['Symbol']} `)
   d3.select("#ticker-details").html(output)
 }
 

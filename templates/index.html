@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>S&P 500 Dash</title>
+  <title>S&P 500 Dashboard</title>
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -22,7 +22,7 @@
 </head>
 
 <body>
-
+<div id="background-img"></div>
   <div class="container">
     <div class="row">
       <div class="col-md-12 jumbotron text-center" id='headbox'>
@@ -34,12 +34,13 @@
       <div class="col-md-3">
         <div class="well">
           <h5>Select by Ticker:</h5>
-          <select id="tickerSelector" onchange="optionChanged(this.value)">
-          </select>
+          <input list="tickerSelector">
+          <datalist id="tickerSelector" onchange="optionChanged(this.value)">
+          </datalist>
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title">Ticker Details</h3>
+            <h3 class="panel-title" id="ticker-name">Ticker Details</h3>
           </div>
           <div class="panel-body">
             <p id="ticker-details"> Placeholder value </p>
@@ -67,8 +68,10 @@
         </div>
       </div>
     </div>
-  </div>
+
   <button id="data-refresh" class="button-primary">
+  </button>
+</div>
 
 
   <!-- <script src="https://cdn.plot.ly/plotly-1.31.2.min.js"></script> -->
