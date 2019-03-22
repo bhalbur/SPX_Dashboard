@@ -7,9 +7,14 @@ function basicInfo(info){
   Object.entries(info[0]).forEach(([x,y]) => {
     output += `<b>${x}</b>: ${y}<br>`
   })
-
   d3.select("#ticker-name").text(`Ticker Details: ${info[0]['Symbol']} `)
   d3.select("#ticker-details").html(output)
+
+  sector = info[0]['GICS Sector'].split(' ').join('')
+  console.log(sector)
+
+  mapUpdate(sector);
+
 }
 
 
@@ -17,20 +22,39 @@ function fetchMap(defaultTicker){
   d3.json(`/allData/${defaultTicker}`).then(buildMap)
 }
 
+
+function mapUpdate(sector){
+
+for (x in overlays){
+  console.log(overlays[x])
+}
+
+for (x in overlays){
+  myMap.removeLayer(overlays[x])
+}
+
+myMap.addLayer(baseMap)
+myMap.addLayer(overlays[sector])
+}
+
+
+var myMap;
+var baseMap;
+var overlays;
+
 function buildMap(jsonData){
-
-
 
 defaultTicker = jsonData.defaultTicker;
 mapData = jsonData['data'];
 
-var myMap = L.map("map-div", {
+//myMap defined as global variable
+myMap = L.map("map-div", {
   center: [38.0902, -97.7129],
   zoom: 4,
 });
 
 
-var baseMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+baseMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
   maxZoom: 20,
   minZoom: 4,
@@ -95,7 +119,10 @@ var baseLayers = {
   'Base Map': baseMap
 };
 
-var overlays = {
+//overlays is defined outside the function as a global variable
+//it will be called in the updateMap funcion
+
+overlays = {
   'Industrials': IndusLayer,
   'HealthCare': HCLayer,
   'InformationTechnology': ITLayer,
@@ -153,6 +180,8 @@ function refreshData(){
 
   d3.json('/scrape')
 }
+
+
 
 
 var defaultTicker;
