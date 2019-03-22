@@ -238,7 +238,7 @@ function optionChanged(dropdown_value, data) {
     else{var mktStatus = 'Markets Currently Closed'}
 
 
-    d3.select('#pxHtml').html(`<h4> Last Price:</h4><h3> $${data[0]['current_price']} </h3><hr> Updated: ${time} <br> ${mktStatus}`)
+    d3.select('#pxHtml').html(`<h4> Last Price:</h4><h3> $ ${parseFloat(data[0]['current_price']).toFixed(2)} </h3><hr> Updated: ${time} <br> ${mktStatus}`)
 
     console.log(data[0])
   })
