@@ -5,7 +5,12 @@ import numpy as np
 import pprint
 import requests
 import json
-from googlekey import API_KEY
+
+
+try:
+    from googlekey import API_KEY
+except ImportError:
+    from keys import API_KEY
 
 
 import sqlalchemy
