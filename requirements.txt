@@ -6,3 +6,4 @@ requests
 sqlalchemy
 gunicorn
 flask_sqlalchemy
+lxml
