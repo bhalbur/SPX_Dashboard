@@ -7,24 +7,54 @@ function basicInfo(info){
   Object.entries(info[0]).forEach(([x,y]) => {
     output += `<b>${x}</b>: ${y}<br>`
   })
-
   d3.select("#ticker-name").text(`Ticker Details: ${info[0]['Symbol']} `)
   d3.select("#ticker-details").html(output)
+
+  sector = info[0]['GICS Sector'].split(' ').join('')
+  console.log(sector)
+
+  mapUpdate(sector);
+
 }
 
 
-function fetchMap(){
-  d3.json('/allData').then(buildMap)
+function fetchMap(defaultTicker){
+  d3.json(`/allData/${defaultTicker}`).then(buildMap)
 }
 
-function buildMap(mapData){
 
-var myMap = L.map("map-div", {
+function mapUpdate(sector){
+
+for (x in overlays){
+  console.log(overlays[x])
+}
+
+for (x in overlays){
+  myMap.removeLayer(overlays[x])
+}
+
+myMap.addLayer(baseMap)
+myMap.addLayer(overlays[sector])
+}
+
+
+var myMap;
+var baseMap;
+var overlays;
+
+function buildMap(jsonData){
+
+defaultTicker = jsonData.defaultTicker;
+mapData = jsonData['data'];
+
+//myMap defined as global variable
+myMap = L.map("map-div", {
   center: [38.0902, -97.7129],
   zoom: 4,
 });
 
-var baseMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+
+baseMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
   maxZoom: 20,
   minZoom: 4,
@@ -59,6 +89,10 @@ if (row.lat && row.lng){
         shape: 'square',
       })
   })
+  if (row.Symbol == defaultTicker){
+    shownSector = row['GICS Sector'].split(' ').join('')
+    console.log(shownSector)
+  }
   sectorNames[GICScolor(row['GICS Sector'])[1]].push(marker)
   marker.bindPopup(`${row['Security']} (${row['Symbol']}) <hr> ${row['GICS Sector']}`)
 
@@ -85,7 +119,10 @@ var baseLayers = {
   'Base Map': baseMap
 };
 
-var overlays = {
+//overlays is defined outside the function as a global variable
+//it will be called in the updateMap funcion
+
+overlays = {
   'Industrials': IndusLayer,
   'HealthCare': HCLayer,
   'InformationTechnology': ITLayer,
@@ -99,7 +136,7 @@ var overlays = {
   'Energy': EnergLayer
   };
 
-myMap.addLayer(IndusLayer)
+myMap.addLayer(overlays[shownSector])
 
 L.control.layers(baseLayers,overlays).addTo(myMap);
 
@@ -143,6 +180,8 @@ function refreshData(){
 
   d3.json('/scrape')
 }
+
+
 
 
 var defaultTicker;
