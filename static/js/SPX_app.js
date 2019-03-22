@@ -182,13 +182,14 @@ function init() {
 
 
 
-
-
 function optionChanged(dropdown_value, data) {
   d3.json(`/ticker_info/${dropdown_value}`).then(function (data) {
     console.log(data)
     buildCandleStick(data)
-    d3.select('#pxHtml').html(`Last Price: $${data[0]['current_price']}`)
+    time = moment().format(" M-D, h:mm:ss a");
+    d3.select('#pxHtml').html(`Last Price: $${data[0]['current_price']} Date: ${time}`)
+
+    console.log(data[0])
   })
   d3.json(`/basic/${dropdown_value}`).then(basicInfo)
 };
