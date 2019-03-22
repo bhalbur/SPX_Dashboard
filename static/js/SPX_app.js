@@ -222,11 +222,23 @@ function init() {
 
 
 function optionChanged(dropdown_value, data) {
+  var mktStatus;
+
   d3.json(`/ticker_info/${dropdown_value}`).then(function (data) {
     console.log(data)
     buildCandleStick(data)
     time = moment().format(" M-D, h:mm:ss a");
-    d3.select('#pxHtml').html(`Last Price: $${data[0]['current_price']} Date: ${time}`)
+    marketOpen = moment().startOf('day').add(6, 'hours').format(" M-D, h:mm:ss a");
+    marketClose = moment().startOf('day').add(13, 'hours').add(30, 'minutes').format(" M-D, h:mm:ss a");
+    console.log(marketOpen);
+    console.log(marketClose);
+    if (time > marketOpen && time < marketClose){
+      mktStatus =  'Markets Currently Open'
+    }
+    else{var mktStatus = 'Markets Currently Closed'}
+
+
+    d3.select('#pxHtml').html(`<h4> Last Price:</h4><h3> $${data[0]['current_price']} </h3><hr> Updated: ${time} <br> ${mktStatus}`)
 
     console.log(data[0])
   })
